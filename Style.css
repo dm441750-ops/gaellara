@@ -1,0 +1,220 @@
+/* -------------------------------------------------- */
+/* 1. RESET Y BASE MINIMALISTA */
+/* -------------------------------------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+}
+
+body {
+    /* Tipografía limpia y moderna (sans-serif) */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f7f7f7; /* Fondo gris muy claro */
+    color: #333; /* Texto gris oscuro */
+    padding: 20px;
+}
+
+/* -------------------------------------------------- */
+/* 2. LAYOUT PRINCIPAL */
+/* -------------------------------------------------- */
+
+.container {
+    max-width: 1000px; /* Ancho máximo amplio para catálogos */
+    margin: 40px auto; /* Centrar y añadir espacio vertical */
+    padding: 30px;
+    background-color: #ffffff; /* Fondo blanco puro para el contenido */
+    border-radius: 8px; /* Bordes ligeramente redondeados */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08); /* Sombra sutil pero visible */
+}
+
+/* -------------------------------------------------- */
+/* 3. TIPOGRAFÍA Y ENCABEZADOS */
+/* -------------------------------------------------- */
+
+h1 {
+    font-weight: 400; /* Fuente no tan pesada */
+    font-size: 2.5em;
+    color: #2c3e50; /* Color primario oscuro */
+}
+
+h2 {
+    font-weight: 300;
+    margin-bottom: 25px;
+    margin-top: 30px;
+    color: #34495e;
+    border-bottom: 1px solid #eee; /* Separador sutil */
+    padding-bottom: 10px;
+}
+
+/* -------------------------------------------------- */
+/* 4. BARRA DE NAVEGACIÓN (HEADER) */
+/* -------------------------------------------------- */
+
+.nav-bar {
+    text-align: left;
+    margin-bottom: 40px;
+    padding-bottom: 10px;
+}
+
+/* -------------------------------------------------- */
+/* 5. SECCIÓN DE PRODUCTOS (GRID) */
+/* -------------------------------------------------- */
+
+/* Contenedor de la cuadrícula de productos */
+.product-grid {
+    display: grid;
+    /* Cuadrícula adaptable con mínimo 280px por columna */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+    gap: 30px; /* Espacio entre las tarjetas */
+    margin-top: 20px;
+}
+
+/* Estilo para cada tarjeta de producto */
+.product-card {
+    border: 1px solid #e0e0e0; /* Borde muy sutil */
+    padding: 25px;
+    border-radius: 6px;
+    background-color: #fff;
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
+}
+
+/* Efecto hover profesional */
+.product-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px); /* Se eleva un poco */
+}
+
+.product-card h3 {
+    font-weight: 500;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.product-card .description {
+    color: #777;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.product-card .price {
+    font-weight: 600;
+    color: #27ae60; /* Color de acento para el precio (verde) */
+    font-size: 1.4em;
+    margin: 15px 0;
+}
+
+/* -------------------------------------------------- */
+/* 6. BOTONES */
+/* -------------------------------------------------- */
+
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* -------------------------------------------------- */
+/* 7. CARRITO */
+/* -------------------------------------------------- */
+
+.cart-item {
+    border-bottom: 1px dashed #ccc;
+    padding: 10px 0;
+    font-size: 1.1em;
+    display: flex;
+    justify-content: space-between;
+}
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+/* -------------------------------------------------- */
+/* 1. HEADER Y LOGO (Nuevos estilos) */
+/* -------------------------------------------------- */
+
+.nav-bar {
+    display: flex;
+    justify-content: space-between; /* Alinea elementos a los extremos */
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #eee;
+}
+
+.logo-container {
+    flex-grow: 1; /* Permite que este contenedor use el espacio disponible */
+    text-align: center; /* Centra el título principal */
+}
+
+.nav-bar h1 {
+    font-size: 3em; /* Más grande */
+    font-weight: 600; /* Más pesado para llamar la atención */
+}
+
+/* -------------------------------------------------- */
+/* 2. ICONO DE INSTAGRAM EN HEADER */
+/* -------------------------------------------------- */
+
+.social-header {
+    text-align: right;
+}
+
+.instagram-link {
+    text-decoration: none;
+    color: #c13584; /* Color de Instagram */
+    font-size: 1.1em;
+    font-weight: 500;
+    padding: 5px 10px;
+    border: 1px solid #c13584;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.instagram-link:hover {
+    background-color: #fce4ec;
+}
+
+/* -------------------------------------------------- */
+/* 3. IMÁGENES EN PRODUCT CARD */
+/* -------------------------------------------------- */
+
+.product-card img {
+    width: 100%;
+    max-height: 280px; /* Limita la altura de las imágenes */
+    object-fit: cover; /* Asegura que la imagen cubra el espacio sin distorsionarse */
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+/* -------------------------------------------------- */
+/* 4. BOTÓN VACIAR CARRITO */
+/* -------------------------------------------------- */
+
+.clear-cart-btn {
+    background-color: #e74c3c; /* Rojo para acción peligrosa */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+    transition: background-color 0.3s;
+}
+
+.clear-cart-btn:hover {
+    background-color: #c0392b;
+}

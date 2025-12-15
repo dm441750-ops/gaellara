@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>GL Legacy | Tienda Minimalista</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        
+       <header class="nav-bar">
+    <div class="logo-container">
+        <h1>GL Legacy</h1>
+    </div>
+    
+    <div class="social-header">
+        <a href="https://www.instagram.com/gl.legacy01/" target="_blank" class="instagram-link">
+            📸 Instagram
+        </a>
+    </div>
+</header>
+
+        <section class="products-section">
+            <h2 id="catalogo-titulo">Catálogo de Productos</h2>
+            
+            <div class="category-filters">
+                <button onclick="filterProducts('all')">Todos</button>
+                <button onclick="filterProducts('playera')">Playeras</button>
+                <button onclick="filterProducts('hoodie')">Hoodies</button>
+            </div>
+            <div id="products" class="product-grid">
+                </div>
+        </section>
+
+        <section class="cart-section">
+            <h2>Carrito de Compras</h2>
+
+            <button class="clear-cart-btn" onclick="clearCart('guest')">Vaciar Carrito</button>
+
+            <div id="cart">
+                </div>
+            
+            <div id="cart-total" class="cart-total">
+                </div>
+            
+            <button class="checkout-button" onclick="checkoutMercadoPago()">
+                Pagar con Mercado Pago
+            </button>
+        </section>
+        
+    </div> 
+    
+    
+
+    <script>
+    const api = '/api';
+
+    
+    // -----------------------------------------------------------------
+// 1. FUNCIÓN loadProducts MODIFICADA para recibir el filtro
+// -----------------------------------------------------------------
+async function loadProducts(category = 'all'){
+    
+    let url = api + '/products'; 
+    
+    // Si la categoría no es 'all' ni está vacía, añade el parámetro ?category=
+    if (category && category !== 'all') {
+        url = url + `?category=${category}`;
+    }
+
+    const res = await fetch(url);
+    const prods = await res.json();
+    const pdiv = document.getElementById('products');
+    
+    // Opcional: Actualiza el título del catálogo aquí (esto es lo que ya hacía tu código)
+    document.getElementById('catalogo-titulo').innerText = 
+        category === 'all' ? 'Catálogo de Productos' : 
+        (category === 'playera' ? 'Playeras Disponibles' : 'Hoodies Disponibles');
+
+
+    pdiv.innerHTML = prods.map(p =>
+      `<div class="product-card">
+         <img src="${p.imageUrl || 'https://via.placeholder.com/280x250?text=GL+Legacy'}" alt="${p.name}">
+         
+         <h3>${p.name}</h3>
+         <p class="description">${p.description}</p>
+         <p class="price">$${p.price}</p>
+         <button onclick="addToCart('guest', ${p.id}, '${p.name}', ${p.price})">Agregar al Carrito</button>
+       </div>`
+    ).join('');
+}
+
+    // -----------------------------------------------------------------
+    // 2. FUNCIÓN addToCart (Agrega productos al carrito)
+    // -----------------------------------------------------------------
+    async function addToCart(user, id, name, price){
+      await fetch(`/api/cart/add/${user}`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ productId:id, name, price, quantity:1 })
+      });
+      loadCart(user);
+    }
+    
+    // -----------------------------------------------------------------
+    // 3. FUNCIÓN loadCart MEJORADA (MUESTRA EL TOTAL y LISTA ÍTEMS)
+    // -----------------------------------------------------------------
+    async function loadCart(user='guest'){
+      const res = await fetch(`/api/cart/${user}`);
+      const cart = await res.json();
+      const cartDiv = document.getElementById('cart');
+      const totalDiv = document.getElementById('cart-total');
+
+      let total = 0;
+      
+      cartDiv.innerHTML = cart.map(i => {
+          const itemTotal = i.price * i.quantity;
+          total += itemTotal;
+          
+          return `<div class="cart-item">
+                    <span>${i.name} x ${i.quantity}</span>
+                    <span class="item-price">$${itemTotal.toFixed(2)}</span>
+                  </div>`;
+      }).join('');
+      
+      // MOSTRAR EL TOTAL
+      totalDiv.innerHTML = `Total: <strong>$${total.toFixed(2)}</strong>`;
+    }
+
+    
+  
+   // -----------------------------------------------------------------
+// 4. FUNCIÓN filterProducts (Llama a la carga con filtro)
+// -----------------------------------------------------------------
+function filterProducts(category) {
+    // Llama a la función principal de carga con la categoría seleccionada
+    loadProducts(category);
+}
+    
+    // -----------------------------------------------------------------
+    // 5. FUNCIÓN clearCart (Vaciar Carrito)
+    // -----------------------------------------------------------------
+    async function clearCart(user = 'guest') {
+        const confirmation = confirm("¿Estás seguro de que quieres vaciar completamente tu carrito?");
+
+        if (confirmation) {
+            const res = await fetch(`/api/cart/clear/${user}`, { 
+                method: 'DELETE' 
+            });
+            
+             if (res.ok) {
+                loadCart(user); 
+                alert("Carrito vaciado con éxito.");
+            } else {
+                 alert("Error al vaciar el carrito.");
+            }
+        }
+    }
+
+    // -----------------------------------------------------------------
+    // 6. FUNCIÓN checkoutMercadoPago (Simulación de pago)
+    // -----------------------------------------------------------------
+    async function checkoutMercadoPago(user = 'guest') {
+        const resCart = await fetch(`/api/cart/${user}`);
+        const cartItems = await resCart.json();
+
+        if (cartItems.length === 0) {
+            alert("Tu carrito está vacío. Agrega productos antes de pagar.");
+            return;
+        }
+        
+        const confirmation = confirm("Simulación de pago con Mercado Pago: ¿Deseas confirmar la compra por el total?");
+
+        if (confirmation) {
+            alert("¡Pago exitoso! La compra se ha simulado. Ahora limpiaremos tu carrito.");
+
+            await fetch(`/api/cart/clear/${user}`, { 
+                method: 'DELETE' 
+            });
+            
+            loadCart(user);
+        } else {
+            alert("Compra cancelada. Puedes seguir navegando.");
+        }
+    }
+
+
+    // -----------------------------------------------------------------
+    // CARGA INICIAL (Ahora llamamos a loadProducts con 'all' para asegurar)
+    // -----------------------------------------------------------------
+   window.onload = () => { loadProducts('all'); loadCart('guest'); };
+</script>
+</body>
+</html>
